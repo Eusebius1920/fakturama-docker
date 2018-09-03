@@ -6,6 +6,9 @@ To run the image:
 docker run -it --rm \
        -e DISPLAY=$DISPLAY \
        -v /tmp/.X11-unix:/tmp/.X11-unix \
-       -v LOKALER_PFAD:/root/fakturama-workingdir \
+       -v ~/.fakturama2:/root/.fakturama2 \
+       -v LOCAL_PATH_ON_YOUR_MACHINE:/root/fakturama-workingdir \
        fakturama
 ```
+
+You can alter the `LOCAL_PATH` as the path where Fakturama should save its output (and its database).

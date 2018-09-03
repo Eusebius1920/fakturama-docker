@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM ubuntu:bionic
 
 
 ENV FAKTURAMA_MAJOR="2.0.2"
@@ -10,22 +10,20 @@ ENV LANGUAGE de_DE:en
 ENV LC_ALL de_DE.UTF-8
 
 COPY fakturama.deb /root/fakturama.deb
-COPY com.sebulli.fakturama.rcp.prefs /root/.fakturama2/.metadata/.plugins/org.eclipse.core.runtime/.settings/com.sebulli.fakturama.rcp.prefs
 
-RUN ls -lah /root
 RUN apt-get update && \
-     apt-get upgrade -y --no-install-recommends && \
-     dpkg -i /root/fakturama.deb; \
-     apt-get install -f -y --no-install-recommends && \
-     apt-get install -y --no-install-recommends libwebkitgtk-3.0-0 locales libreoffice && \
-     rm -rf /var/lib/apt/lists/*
-
-RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen && \
-    locale-gen
+    apt-get upgrade -y --no-install-recommends && \
+    apt-get install -y locales && \
+    sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen && \
+    dpkg -i /root/fakturama.deb; \
+    apt-get install -f -y --no-install-recommends && \
+    apt-get install -y --no-install-recommends libwebkitgtk-3.0-0 locales && \
+    apt-get install -y libreoffice gvfs && \
+    rm -rf /var/lib/apt/lists/*
 
 VOLUME  "/tmp/.X11-unix"
 VOLUME "/root/fakturama-workingdir"
-
-
+VOLUME "/root/.fakturama2"
 
 ENTRYPOINT ["/usr/share/fakturama2/Fakturama"]
